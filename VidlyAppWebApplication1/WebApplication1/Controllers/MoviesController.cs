@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -16,7 +18,20 @@ namespace WebApplication1.Controllers
             {
                 Name = "Shrek"
             };
-            return View(movie);
+
+            var customers = new List<Customer>
+            {
+                new Customer {Name = "Customer1"},
+                new Customer {Name = "Customer2"}
+            };
+
+            var viewModel = new RandomMovieViewModel
+            {
+                Movie = movie,
+                Customers = customers
+            };
+            
+            return View(viewModel);
             //Action Result: return RedirectToAction("Index", "Home", new {page = "1", sortBy="name"});
         }
 
@@ -40,11 +55,12 @@ namespace WebApplication1.Controllers
 
             return Content(string.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
         }
-
+        [Route("movies/released/{year}/{month:regex(\\d{4}):range(1:12)}")]
         public ActionResult ByReleaseDate(int year, int month)
         {
             return Content(year + "/" + month);
         }
+
 
 
 
